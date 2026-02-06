@@ -53,7 +53,7 @@ public class SinglyLinkedList<E> implements List<E> {
         public void setNext(Node<E> n) {
             next = n;
         }
-    } //----------- end of nested Node class -----------
+    }
 
     /**
      * The head node of the list
@@ -155,9 +155,9 @@ public class SinglyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             throw new NoSuchElementException("List is empty");
         }
-
         E element = head.getElement();
         head = head.getNext();
+
         size--;
 
         return element;
@@ -175,7 +175,7 @@ public class SinglyLinkedList<E> implements List<E> {
 
         Node<E> current = head;
         while (current.getNext().getNext() != null) {
-            current = current.getNext();
+            current = current.getNext();//go up to second last elemrnt
         }
         E element = current.getNext().getElement();
         current.setNext(null);

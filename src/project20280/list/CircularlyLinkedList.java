@@ -125,7 +125,7 @@ public class CircularlyLinkedList<E> implements List<E> {
                 throw new NoSuchElementException();
             }
             if (firstPass) {
-                curr = tail.next;
+                //curr = tail.next;
                 firstPass = false;
             } else {
                 curr = curr.next;
