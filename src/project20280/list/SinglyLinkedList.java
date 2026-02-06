@@ -159,6 +159,7 @@ public class SinglyLinkedList<E> implements List<E> {
         E element = head.getElement();
         head = head.getNext();
         size--;
+
         return element;
     }
 
