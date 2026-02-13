@@ -8,7 +8,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ArrayQueueTest {
+public class ArrayQueueTest {
 
     @Test
     void testSize() {
