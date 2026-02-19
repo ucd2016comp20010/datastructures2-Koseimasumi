@@ -223,7 +223,7 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
     public Position<E> addRight(Position<E> p, E e) throws IllegalArgumentException {
         // TODO
         Node<E> parent = validate(p);
-        if (parent.getLeft() != null)
+        if (parent.getRight() != null)
             throw new IllegalArgumentException("p already has a left child");
 
         Node<E> child = createNode(e, parent, null, null);
@@ -317,26 +317,59 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
         size--;
         E temp = node.getElement();
 
-        // Help garbage collection
-        //node.setElement(null);
-        //node.setLeft(null);
-        //node.setRight(null);
-        //node.setParent(node); // convention for defunct node
+        node.setElement(null);
+        node.setLeft(null);
+        node.setRight(null);
+        node.setParent(node);
 
         return temp;
     }
 
+    /**
+     * Returns the height of the tree.
+     * @return the height of the tree
+     */
+    public int height() {
+        return height(root);
+    }
+
+    /**
+     * Returns the height of the subtree rooted at the given node.
+     * @param node the root of the subtree
+     * @return the height of the subtree
+     */
+    private int height(Node<E> node) {
+        if (node == null) return -1;
+        return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
+    }
+
+    /**
+     * Returns a string representation of the tree based on the inorder traversal.
+     * @return string representation of the tree
+     */
     public String toString() {
         return positions().toString();
     }
 
     public void createLevelOrder(ArrayList<E> l) {
         // TODO
+        root = createLevelOrderHelper(l,  root, 0);
+
+
     }
 
     private Node<E> createLevelOrderHelper(java.util.ArrayList<E> l, Node<E> p, int i) {
         // TODO
-        return null;
+        if (i >= l.size()) return null;
+        if (l.get(i) == null) return null;
+
+        Node<E> node = createNode(l.get(i), p, null, null);
+        size++;
+
+        node.setLeft(createLevelOrderHelper(l, node, 2 * i + 1));
+        node.setRight(createLevelOrderHelper(l, node, 2 * i + 2));
+
+        return node;
     }
 
     public void createLevelOrder(E[] arr) {
@@ -345,12 +378,55 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
 
     private Node<E> createLevelOrderHelper(E[] arr, Node<E> p, int i) {
         // TODO
-        return null;
+
+        if (i >= arr.length) return null;
+        if (arr[i] == null) return null;
+
+        Node<E> node = createNode(arr[i], p, null, null);
+        size++;
+
+        node.setLeft(createLevelOrderHelper(arr, node, 2 * i + 1));
+        node.setRight(createLevelOrderHelper(arr, node, 2 * i + 2));
+
+        return node;
     }
 
     public String toBinaryTreeString() {
         BinaryTreePrinter<E> btp = new BinaryTreePrinter<>(this);
         return btp.print();
+    }
+
+    /**
+     * Returns an iterable collection of positions in inorder traversal.
+     * @return iterable collection of positions in inorder traversal
+     */
+    public Iterable<Position<E>> inorder() {
+        java.util.List<Position<E>> snapshot = new java.util.ArrayList<>();
+        if (!isEmpty())
+            inorderSubtree(root(), snapshot);
+        return snapshot;
+    }
+
+    /**
+     * Recursively performs inorder traversal of the subtree rooted at position p.
+     * @param p position of the root of the current subtree
+     * @param snapshot collection to store the positions
+     */
+    private void inorderSubtree(Position<E> p, java.util.List<Position<E>> snapshot) {
+        if (left(p) != null)
+            inorderSubtree(left(p), snapshot);
+        snapshot.add(p);
+        if (right(p) != null)
+            inorderSubtree(right(p), snapshot);
+    }
+
+    /**
+     * Returns an iterable collection of all positions in the tree using inorder traversal.
+     * @return iterable collection of positions
+     */
+    @Override
+    public Iterable<Position<E>> positions() {
+        return inorder();
     }
 
     /**
